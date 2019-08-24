@@ -1,15 +1,31 @@
 PODS:
-  - ServiceProvider (0.1.0)
+  - KeychainAccess (3.2.0)
+  - RxCocoa (4.5.0):
+    - RxSwift (>= 4.4.2, ~> 4.4)
+  - RxSwift (4.5.0)
+  - ServiceProvider (1.0.0):
+    - KeychainAccess
+    - RxCocoa (~> 4.5)
+    - RxSwift (~> 4.5)
 
 DEPENDENCIES:
   - ServiceProvider (from `../`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - KeychainAccess
+    - RxCocoa
+    - RxSwift
 
 EXTERNAL SOURCES:
   ServiceProvider:
     :path: "../"
 
 SPEC CHECKSUMS:
-  ServiceProvider: c333853aaebd0bcacf46d05ee2027302dea044ac
+  KeychainAccess: 3b1bf8a77eb4c6ea1ce9404c292e48f948954c6b
+  RxCocoa: cbf70265dc65a981d4ac982e513c10cf23df24a0
+  RxSwift: f172070dfd1a93d70a9ab97a5a01166206e1c575
+  ServiceProvider: cbc5665d0d3fa1bafdaefee501142b5506177dcc
 
 PODFILE CHECKSUM: 331812468b0622fc00029acba5f96f2b2b81b63d
 

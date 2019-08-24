@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'ServiceProvider'
   s.version          = '1.0.0'
-  s.summary          = 'A short description of ServiceProvider.'
+  s.summary          = 'ServiceProvider keeps your data near from our code'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,26 +18,20 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
-                       DESC
+ServiceProvider is a library to implement the default methods to maintain stored data
+DESC
 
   s.homepage         = 'https://github.com/umobi/ServiceProvider'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'brennobemoura' => 'brenno@umobi.com.br' }
   s.source           = { :git => 'https://github.com/brennobemoura/ServiceProvider.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
-
+  
+  s.swift_version = '5.0'
   s.ios.deployment_target = '8.0'
 
   s.source_files = 'ServiceProvider/Classes/**/*'
   
-  # s.resource_bundles = {
-  #   'ServiceProvider' => ['ServiceProvider/Assets/*.png']
-  # }
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
   s.dependency 'RxSwift', '~> 4.5'
   s.dependency 'RxCocoa', '~> 4.5'
   s.dependency 'KeychainAccess'

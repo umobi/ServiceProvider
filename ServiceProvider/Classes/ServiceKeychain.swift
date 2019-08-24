@@ -20,23 +20,23 @@ public protocol ServiceKeychain {
 }
 
 public extension ServiceKeychain {
-    public func set(_ value: String, for key: KeychainKeys) throws {
+    func set(_ value: String, for key: KeychainKeys) throws {
         try self.keychain.set(value, key: key.rawValue)
     }
     
-    public func set(_ value: Data, for key: KeychainKeys) throws {
+    func set(_ value: Data, for key: KeychainKeys) throws {
         try self.keychain.set(value, key: key.rawValue)
     }
     
-    public func get(for key: KeychainKeys) throws -> String? {
+    func get(for key: KeychainKeys) throws -> String? {
         return try self.keychain.getString(key.rawValue)
     }
     
-    public func get(for key: KeychainKeys) throws -> Data? {
+    func get(for key: KeychainKeys) throws -> Data? {
         return try self.keychain.getData(key.rawValue)
     }
     
-    public func remove(for key: KeychainKeys) throws {
+    func remove(for key: KeychainKeys) throws {
         try self.keychain.remove(key.rawValue)
     }
 }

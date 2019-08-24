@@ -18,7 +18,7 @@ public protocol ServiceStoredRxProtocol: ServiceNotification {
 }
 
 public extension ServiceStoredRxProtocol {
-    public var valueObservable: Observable<T> {
+    var valueObservable: Observable<T> {
         return NotificationCenter.default.rx
             .notification(NotificationKeys.valueDidChange.name)
             .map { _ in return self.value }

@@ -17,17 +17,17 @@ public protocol ServiceNotification {
 }
 
 public extension NotificationKey {
-    public var name: Notification.Name {
+    var name: Notification.Name {
         return Notification.Name("NotificationKey." + "\(self)")
     }
     
-    public static var valueDidChange: Self {
+    static var valueDidChange: Self {
         return Self(rawValue: "valueDidChange")!
     }
 }
 
 public extension ServiceNotification {
-    public func post(object: Any? = nil, for key: NotificationKeys) {
+    func post(object: Any? = nil, for key: NotificationKeys) {
         NotificationCenter.default.post(name: key.name, object: nil)
     }
 }
