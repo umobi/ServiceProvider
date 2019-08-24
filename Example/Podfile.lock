@@ -1,0 +1,16 @@
+PODS:
+  - ServiceProvider (0.1.0)
+
+DEPENDENCIES:
+  - ServiceProvider (from `../`)
+
+EXTERNAL SOURCES:
+  ServiceProvider:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  ServiceProvider: c333853aaebd0bcacf46d05ee2027302dea044ac
+
+PODFILE CHECKSUM: 331812468b0622fc00029acba5f96f2b2b81b63d
+
+COCOAPODS: 1.7.5

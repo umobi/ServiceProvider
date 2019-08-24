@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'ServiceProvider_Example' do
+  pod 'ServiceProvider', :path => '../'
+
+  target 'ServiceProvider_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

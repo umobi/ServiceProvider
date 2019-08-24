@@ -1,0 +1,22 @@
+{
+  "name": "ServiceProvider",
+  "version": "0.1.0",
+  "summary": "A short description of ServiceProvider.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/brennobemoura/ServiceProvider",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "brennobemoura": "brenno@umobi.com.br"
+  },
+  "source": {
+    "git": "https://github.com/brennobemoura/ServiceProvider.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "ServiceProvider/Classes/**/*"
+}
