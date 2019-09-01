@@ -22,7 +22,11 @@ public extension NotificationKey {
     }
     
     static var valueDidChange: Self {
-        return Self(rawValue: "valueDidChange")!
+        guard let didChange = Self(rawValue: kValueDidChange) else {
+            fatalError("Error: ServiceProvider.NotificationKeys for \(String(describing: Self.self)) did not have kValueDidChange")
+        }
+        
+        return didChange
     }
 }
 
@@ -31,3 +35,5 @@ public extension ServiceNotification {
         NotificationCenter.default.post(name: key.name, object: nil)
     }
 }
+
+public let kValueDidChange = "valueDidChange"
