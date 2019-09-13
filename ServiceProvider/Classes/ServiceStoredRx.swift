@@ -15,8 +15,8 @@ public protocol NotificationRxKey: NotificationKey {
 }
 
 public protocol ServiceStoredRxProtocol: ServiceNotification where NotificationKeys: NotificationRxKey {
-    associatedtype T
-    var value: T { get }
+    associatedtype Value
+    var value: Value { get }
 }
 
 public extension NotificationRxKey {
@@ -31,13 +31,13 @@ public extension NotificationRxKey {
 }
 
 public extension Reactive where Base: ServiceStoredRxProtocol {
-    func notification<Key>(_ key: Key) -> Observable<Base.T> where Key == Base.NotificationKeys {
+    func notification<Key>(_ key: Key) -> Observable<Base.Value> where Key == Base.NotificationKeys {
         return NotificationCenter.default.rx
-            .notification(key.name)
+            .notification(key.name(self.base))
             .map { _ in return self.base.value }
     }
     
-    var value: Observable<Base.T> {
+    var value: Observable<Base.Value> {
         guard let valueDidChange = Base.NotificationKeys.valueDidChange else {
             #if DEBUG
             print("Error: Calling ServiceStoredRxProtocol<\(String(describing: Base.self))>.valueObservable will not perfom any action.\nOverride NotificationKeys.valueDidChange method or set one case with default rawValue \(kValueDidChange)")
@@ -46,7 +46,7 @@ public extension Reactive where Base: ServiceStoredRxProtocol {
         }
         
         return NotificationCenter.default.rx
-            .notification(valueDidChange.name)
+            .notification(valueDidChange.name(self.base))
             .map { _ in return self.base.value }
             .startWith(self.base.value)
     }
@@ -54,6 +54,34 @@ public extension Reactive where Base: ServiceStoredRxProtocol {
 
 public let kValueDidChange = "valueDidChange"
 
-public typealias ServiceStoredRx<P: ProviderType, T> = ServiceStored<P, T> & ServiceStoredRxProtocol & ReactiveCompatible
+public typealias RxServiceStoredController<Value> = ServiceStoredController<Value> & ServiceStoredRxProtocol
 
-public protocol ServiceRxType: ServiceType, ReactiveCompatible {}
+public protocol RxServiceType: ServiceType, ReactiveCompatible where Controller: (ServiceController & ServiceStoredRxProtocol) {}
+
+open class RxService<Controller: ServiceController & ServiceStoredRxProtocol>: Service<Controller>, RxServiceType {
+    public required init() {
+        super.init()
+    }
+}
+
+public extension Reactive where Base: RxServiceType {
+    func notification<Key>(_ key: Key) -> Observable<Base.Controller.Value> where Key == Base.Controller.NotificationKeys {
+        return NotificationCenter.default.rx
+            .notification(key.name(self.base.controller))
+            .map { _ in return self.base.controller.value }
+    }
+    
+    var value: Observable<Base.Controller.Value> {
+        guard let valueDidChange = Base.Controller.NotificationKeys.valueDidChange else {
+            #if DEBUG
+            print("Error: Calling ServiceStoredRxProtocol<\(String(describing: Base.self))>.valueObservable will not perfom any action.\nOverride NotificationKeys.valueDidChange method or set one case with default rawValue \(kValueDidChange)")
+            #endif
+            return .never()
+        }
+        
+        return NotificationCenter.default.rx
+            .notification(valueDidChange.name(self.base.controller))
+            .map { _ in return self.base.controller.value }
+            .startWith(self.base.controller.value)
+    }
+}

@@ -9,10 +9,11 @@
 import Foundation
 import KeychainAccess
 
-open class ServiceStored<P: ProviderType, T>: Service<P> {
+open class ServiceStoredController<Value>: ServiceController {
+    required public init() {}
     
-    final private var storedValue: T? = nil
-    public private(set) final var value: T? {
+    final private var storedValue: Value? = nil
+    public private(set) final var value: Value? {
         get {
             self.storedValue = self.prepareToRestore()
             return self.storedValue
@@ -27,9 +28,9 @@ open class ServiceStored<P: ProviderType, T>: Service<P> {
         return self.storedValue != nil
     }
     
-    open func shouldRestore(_ oldValue: T?) -> Bool { return true }
-    open func restore() -> T? { return self.storedValue }
-    private final func prepareToRestore() -> T? {
+    open func shouldRestore(_ oldValue: Value?) -> Bool { return true }
+    open func restore() -> Value? { return self.storedValue }
+    private final func prepareToRestore() -> Value? {
         guard self.shouldRestore(self.storedValue) else {
             return self.storedValue
         }
@@ -37,9 +38,9 @@ open class ServiceStored<P: ProviderType, T>: Service<P> {
         return self.restore()
     }
     
-    open func shouldSync(_ newValue: T?) -> Bool { return true }
-    open func sync(_ newValue: T?) {}
-    private final func prepareToSync(_ value: T?) -> T? {
+    open func shouldSync(_ newValue: Value?) -> Bool { return true }
+    open func sync(_ newValue: Value?) {}
+    private final func prepareToSync(_ value: Value?) -> Value? {
         guard self.shouldSync(value) else {
             return self.storedValue
         }
@@ -52,7 +53,7 @@ open class ServiceStored<P: ProviderType, T>: Service<P> {
         self.storedValue = nil
     }
     
-    public final func setValue(_ value: T?) {
+    public final func setValue(_ value: Value?) {
         self.value = value
     }
 }

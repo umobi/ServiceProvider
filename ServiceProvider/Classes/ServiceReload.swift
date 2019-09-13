@@ -10,18 +10,22 @@ import Foundation
 import RxCocoa
 import RxSwift
 
-open class ServiceReload<T: ProviderType>: Service<T> {
+open class ReloadService<Controller: ReloadController>: Service<Controller> {
+    open func reload(_ completionHandler: (() -> Void)? = nil) {
+        self.controller.reload(completionHandler)
+    }
+}
+
+open class ReloadController: ServiceController {
     public final let disposeBag = DisposeBag()
     
     open func reload(_ completionHandler: (() -> Void)? = nil) {
         completionHandler?()
     }
     
-    override open func start() {
-        super.start()
-        
+    public required init() {
         NotificationCenter.default.rx
-            .notification(NotificationKeys.reloadInfo.name)
+            .notification(NotificationKeys.reloadInfo.name(self))
             .asDriver(onErrorDriveWith: .never())
             .drive(onNext: { [weak self] _ in
                 self?.reload()
@@ -33,7 +37,7 @@ open class ServiceReload<T: ProviderType>: Service<T> {
     }
 }
 
-extension ServiceReload: ServiceNotification {
+extension ReloadController: ServiceNotification {
     public enum NotificationKeys: String, NotificationKey {
         case reloadInfo
     }
