@@ -58,11 +58,7 @@ public typealias RxServiceStoredController<Value> = ServiceStoredController<Valu
 
 public protocol RxServiceType: ServiceType, ReactiveCompatible where Controller: (ServiceController & ServiceStoredRxProtocol) {}
 
-open class RxService<Controller: ServiceController & ServiceStoredRxProtocol>: Service<Controller>, RxServiceType {
-    public required init() {
-        super.init()
-    }
-}
+open class RxService<Controller: ServiceController & ServiceStoredRxProtocol>: Service<Controller>, RxServiceType {}
 
 public extension Reactive where Base: RxServiceType {
     func notification<Key>(_ key: Key) -> Observable<Base.Controller.Value> where Key == Base.Controller.NotificationKeys {

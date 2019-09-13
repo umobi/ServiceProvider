@@ -14,7 +14,7 @@ public protocol ProviderType: class {
     func service<T>(_ type: T.Type) -> T where T: ServiceShared
     func remove<T>(_ type: T.Type) -> T? where T: ServiceShared
     
-    func orCreate<T>(_ initCallback: @escaping () -> T) -> T where T: ServiceShared
+    func orCreate<T>(_ initCallback: @escaping () -> T.Controller) -> T where T: ServiceShared
 }
 
 public final class Provider: ProviderType {
@@ -28,17 +28,18 @@ public final class Provider: ProviderType {
             return service as! T
         }
 
-        let service = T.init()
+        let service = T.init(controller: .init())
         self.services.append(service)
         return service
     }
     
-    public func orCreate<T>(_ initCallback: @escaping () -> T) -> T where T: ServiceShared {
+    public func orCreate<T>(_ initCallback: @escaping () -> T.Controller) -> T where T: ServiceShared {
         if let service = self.services.first(where: { $0 is T }) {
             return service as! T
         }
         
-        let service = initCallback()
+        let controller = initCallback()
+        let service = T.init(controller: controller)
         self.services.append(service)
         return service
     }
@@ -53,7 +54,6 @@ public final class Provider: ProviderType {
     }
 }
 
-
 public protocol ServiceController {
     init()
 }
@@ -61,17 +61,13 @@ public protocol ServiceController {
 public protocol ServiceType {
     associatedtype Controller: ServiceController
     var controller: Controller { get }
-    init()
+    init(controller: Controller)
 }
 
 open class Service<Controller: ServiceController>: ServiceType {
     public let controller: Controller
     
-    required public init() {
-        self.controller = .init()
-    }
-    
-    public init(controller: Controller) {
+    public required init(controller: Controller) {
         self.controller = controller
     }
 }
