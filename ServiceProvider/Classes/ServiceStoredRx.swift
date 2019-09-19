@@ -56,7 +56,7 @@ public let kValueDidChange = "valueDidChange"
 
 public typealias RxServiceStoredController<Value> = ServiceStoredController<Value> & ServiceStoredRxProtocol
 
-public protocol RxServiceType: ServiceType, ReactiveCompatible where Controller: (ServiceController & ServiceStoredRxProtocol) {}
+public protocol RxServiceType: ServiceType, ReactiveCompatible where Controller: ServiceStoredRxProtocol {}
 
 open class RxService<Controller: ServiceController & ServiceStoredRxProtocol>: Service<Controller>, RxServiceType {}
 

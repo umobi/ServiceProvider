@@ -50,7 +50,7 @@ public final class Provider: ProviderType {
         }
         
         self.services.remove(at: slice.offset)
-        return slice.element as! T
+        return slice.element as? T
     }
 }
 
