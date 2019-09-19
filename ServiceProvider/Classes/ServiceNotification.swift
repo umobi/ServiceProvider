@@ -8,22 +8,26 @@
 
 import Foundation
 
-public protocol NotificationKey: RawRepresentable where RawValue == String {
-    var name: Notification.Name { get }
-}
+public protocol NotificationKey: RawRepresentable where RawValue == String {}
 
 public protocol ServiceNotification {
     associatedtype NotificationKeys: NotificationKey
 }
 
 public extension NotificationKey {
-    var name: Notification.Name {
-        return Notification.Name("NotificationKey." + "\(self)")
+    func name<Service: ServiceNotification>(_ serviceNotification: Service) -> Notification.Name {
+        return Notification.Name(serviceNotification.identifier + "." + self.rawValue)
     }
 }
 
 public extension ServiceNotification {
     func post(object: Any? = nil, for key: NotificationKeys) {
-        NotificationCenter.default.post(name: key.name, object: nil)
+        NotificationCenter.default.post(name: key.name(self), object: nil)
+    }
+}
+
+internal extension ServiceNotification {
+    var identifier: String {
+        return String(format: "%02X", UInt(bitPattern: ObjectIdentifier(Self.self)))
     }
 }
