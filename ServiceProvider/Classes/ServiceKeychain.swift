@@ -40,3 +40,15 @@ public extension ServiceKeychain {
         try self.keychain.remove(key.rawValue)
     }
 }
+
+public extension Keychain {
+    static var main: Keychain {
+        return .init(service: Bundle.main.bundleIdentifier!)
+    }
+}
+
+public extension ServiceKeychain {
+    var keychain: Keychain {
+        return .main
+    }
+}
