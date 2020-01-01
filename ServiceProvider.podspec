@@ -32,7 +32,7 @@ DESC
 
   s.source_files = 'ServiceProvider/Classes/**/*'
   
-  s.dependency 'RxSwift', '~> 4.5'
-  s.dependency 'RxCocoa', '~> 4.5'
-  s.dependency 'KeychainAccess', '~> 3.2.0'
+  s.dependency 'RxSwift', '~> 5.0'
+  s.dependency 'RxCocoa', '~> 5.0'
+  s.dependency 'KeychainAccess', '~> 4.1.0'
 end
