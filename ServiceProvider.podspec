@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ServiceProvider'
-  s.version          = '1.1.0-beta3'
+  s.version          = '1.1.0-beta.3'
   s.summary          = 'ServiceProvider keeps your data near from our code'
 
 # This description is used to generate tags and improve search results.
