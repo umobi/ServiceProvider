@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ServiceProvider'
-  s.version          = '1.1.0-beta2'
+  s.version          = '1.1.0-beta3'
   s.summary          = 'ServiceProvider keeps your data near from our code'
 
 # This description is used to generate tags and improve search results.
@@ -28,7 +28,10 @@ DESC
   s.source           = { :git => 'https://github.com/umobi/ServiceProvider.git', :tag => s.version.to_s }
   
   s.swift_version = '5.1'
-  s.ios.deployment_target = '8.0'
+  s.tvos.deployment_target = '10.0'
+  s.ios.deployment_target = '10.0'
+  s.osx.deployment_target = '10.15'
+  s.watchos.deployment_target = '4.0'
 
   s.source_files = 'ServiceProvider/Classes/**/*'
   
