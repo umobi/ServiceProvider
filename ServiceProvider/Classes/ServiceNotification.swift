@@ -10,13 +10,13 @@ import Foundation
 
 public protocol NotificationKey: RawRepresentable where RawValue == String {}
 
-public protocol ServiceNotification {
+public protocol ServiceNotification: class {
     associatedtype NotificationKeys: NotificationKey
 }
 
 public extension NotificationKey {
     func name<Service: ServiceNotification>(_ serviceNotification: Service) -> Notification.Name {
-        return Notification.Name(serviceNotification.identifier + "." + self.rawValue)
+        return Notification.Name("\(ObjectIdentifier(serviceNotification))" + "." + self.rawValue)
     }
 }
 
@@ -26,8 +26,8 @@ public extension ServiceNotification {
     }
 }
 
-internal extension ServiceNotification {
-    var identifier: String {
-        return String(format: "%02X", UInt(bitPattern: ObjectIdentifier(Self.self)))
+public extension Service where Controller: ServiceNotification {
+    func notification(_ key: Controller.NotificationKeys) -> Notification.Name? {
+        return key.name(self.controller)
     }
 }
