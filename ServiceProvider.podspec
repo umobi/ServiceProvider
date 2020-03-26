@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ServiceProvider'
-  s.version          = '1.1.0'
+  s.version          = '1.1.1'
   s.summary          = 'ServiceProvider keeps your data near from our code'
 
 # This description is used to generate tags and improve search results.
@@ -30,7 +30,6 @@ DESC
   s.swift_version = '5.1'
   s.tvos.deployment_target = '10.0'
   s.ios.deployment_target = '10.0'
-  s.osx.deployment_target = '10.15'
   s.watchos.deployment_target = '4.0'
 
   s.source_files = 'ServiceProvider/Classes/**/*'
