@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ServiceProvider'
-  s.version          = '1.1.0-beta.3'
+  s.version          = '1.1.0'
   s.summary          = 'ServiceProvider keeps your data near from our code'
 
 # This description is used to generate tags and improve search results.
@@ -35,7 +35,7 @@ DESC
 
   s.source_files = 'ServiceProvider/Classes/**/*'
   
-  s.dependency 'RxSwift', '~> 5.0'
-  s.dependency 'RxCocoa', '~> 5.0'
-  s.dependency 'KeychainAccess', '~> 4.1.0'
+  s.dependency 'RxSwift', '>= 4.5', "<= 5.0"
+  s.dependency 'RxCocoa', '>= 4.5', "<= 5.0"
+  s.dependency 'KeychainAccess', ">= 3.2", '<= 4.1.0'
 end

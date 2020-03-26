@@ -54,7 +54,7 @@ public final class Provider: ProviderType {
     }
 }
 
-public protocol ServiceController {
+public protocol ServiceController: class {
     init()
 }
 
