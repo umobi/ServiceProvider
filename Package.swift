@@ -13,7 +13,7 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/kishikawakatsumi/KeychainAccess", "3.2"..<"4.1.0"),
+        .package(url: "https://github.com/kishikawakatsumi/KeychainAccess", "3.2.0"..<"4.1.0"),
         .package(url: "https://github.com/ReactiveX/RxSwift", from: "5.0.0"),
     ],
     targets: [
@@ -21,7 +21,10 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "ServiceProvider",
-            dependencies: ["RxSwift", "RxCocoa", "KeychainAccess"]),
+            dependencies: [
+                "RxSwift", "KeychainAccess"
+                .product(name: "RxCocoa", package: "RxSwift")
+        ]),
         .testTarget(
             name: "ServiceProviderTests",
             dependencies: ["ServiceProvider"]),
