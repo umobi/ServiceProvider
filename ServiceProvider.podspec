@@ -33,7 +33,8 @@ DESC
   s.watchos.deployment_target = '4.0'
 
   s.source_files = 'Sources/ServiceProvider/Classes/**/*'
-  
+
   s.dependency 'RxSwift', '~> 5.0'
+  s.dependency 'RxCocoa', '~> 5.0'
   s.dependency 'KeychainAccess', ">= 3.2", '<= 4.1.0'
 end

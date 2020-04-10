@@ -22,8 +22,10 @@ let package = Package(
         .target(
             name: "ServiceProvider",
             dependencies: [
+                .product(name: "RxCocoa", package: "RxSwift"),
                 "RxSwift", "KeychainAccess"
-        ]),
+            ]
+        ),
         .testTarget(
             name: "ServiceProviderTests",
             dependencies: ["ServiceProvider"]),
