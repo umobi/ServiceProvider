@@ -20,6 +20,8 @@
 // THE SOFTWARE.
 //
 
+#if os(iOS) || os(tvOS)
+
 import Foundation
 import RxCocoa
 import RxSwift
@@ -56,3 +58,5 @@ extension ReloadController: ServiceNotification {
         case reloadInfo
     }
 }
+
+#endif

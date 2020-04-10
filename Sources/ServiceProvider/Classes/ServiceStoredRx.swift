@@ -20,6 +20,8 @@
 // THE SOFTWARE.
 //
 
+#if os(iOS) || os(tvOS)
+
 import Foundation
 import RxSwift
 import RxCocoa
@@ -95,3 +97,5 @@ public extension Reactive where Base: RxServiceType {
             .startWith(self.base.controller.value)
     }
 }
+
+#endif
