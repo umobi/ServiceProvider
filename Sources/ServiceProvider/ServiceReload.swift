@@ -21,48 +21,36 @@
 //
 
 import Foundation
-import KeychainAccess
+import Combine
 
-public protocol KeychainKey: RawRepresentable {
-    var rawValue: String { get }
-}
-
-public protocol ServiceKeychain {
-    associatedtype KeychainKeys: KeychainKey
-    
-    var keychain: Keychain { get }
-}
-
-public extension ServiceKeychain {
-    func set(_ value: String, for key: KeychainKeys) throws {
-        try self.keychain.set(value, key: key.rawValue)
-    }
-    
-    func set(_ value: Data, for key: KeychainKeys) throws {
-        try self.keychain.set(value, key: key.rawValue)
-    }
-    
-    func get(for key: KeychainKeys) throws -> String? {
-        return try self.keychain.getString(key.rawValue)
-    }
-    
-    func get(for key: KeychainKeys) throws -> Data? {
-        return try self.keychain.getData(key.rawValue)
-    }
-    
-    func remove(for key: KeychainKeys) throws {
-        try self.keychain.remove(key.rawValue)
+open class ReloadService<Controller: ReloadController>: Service<Controller> {
+    open func reload(_ completionHandler: (() -> Void)? = nil) {
+        self.controller.reload(completionHandler)
     }
 }
 
-public extension Keychain {
-    static var main: Keychain {
-        return .init(service: Bundle.main.bundleIdentifier!)
+open class ReloadController: ServiceController {
+    private var cancellables: [AnyCancellable] = []
+
+    open func reload(_ completionHandler: (() -> Void)? = nil) {
+        completionHandler?()
+    }
+    
+    public required init() {
+        NotificationCenter.default
+            .publisher(for: NotificationKeys.reloadInfo.name(self))
+            .sink(receiveValue: { [weak self] _ in
+                self?.reload()
+            }).store(in: &self.cancellables)
+        
+        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0, execute: {
+            self.post(for: .reloadInfo)
+        })
     }
 }
 
-public extension ServiceKeychain {
-    var keychain: Keychain {
-        return .main
+extension ReloadController: ServiceNotification {
+    public enum NotificationKeys: String, NotificationKey {
+        case reloadInfo
     }
 }

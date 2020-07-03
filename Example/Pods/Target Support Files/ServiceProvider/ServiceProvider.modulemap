@@ -1,6 +1,0 @@
-framework module ServiceProvider {
-  umbrella header "ServiceProvider-umbrella.h"
-
-  export *
-  module * { export * }
-}

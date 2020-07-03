@@ -20,43 +20,51 @@
 // THE SOFTWARE.
 //
 
-#if os(iOS) || os(tvOS)
-
 import Foundation
-import RxCocoa
-import RxSwift
+import KeychainAccess
 
-open class ReloadService<Controller: ReloadController>: Service<Controller> {
-    open func reload(_ completionHandler: (() -> Void)? = nil) {
-        self.controller.reload(completionHandler)
-    }
+public protocol KeychainKey: RawRepresentable {
+    var rawValue: String { get }
 }
 
-open class ReloadController: ServiceController {
-    public final let disposeBag = DisposeBag()
+public protocol ServiceKeychain {
+    associatedtype KeychainKeys: KeychainKey
     
-    open func reload(_ completionHandler: (() -> Void)? = nil) {
-        completionHandler?()
+    var keychain: Keychain { get }
+}
+
+public extension ServiceKeychain {
+    func set(_ value: String, for key: KeychainKeys) throws {
+        try self.keychain.set(value, key: key.rawValue)
     }
     
-    public required init() {
-        NotificationCenter.default.rx
-            .notification(NotificationKeys.reloadInfo.name(self))
-            .asDriver(onErrorDriveWith: .never())
-            .drive(onNext: { [weak self] _ in
-                self?.reload()
-            }).disposed(by: disposeBag)
-        
-        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0, execute: {
-            self.post(for: .reloadInfo)
-        })
+    func set(_ value: Data, for key: KeychainKeys) throws {
+        try self.keychain.set(value, key: key.rawValue)
+    }
+    
+    func get(for key: KeychainKeys) throws -> String? {
+        return try self.keychain.getString(key.rawValue)
+    }
+    
+    func get(for key: KeychainKeys) throws -> Data? {
+        return try self.keychain.getData(key.rawValue)
+    }
+    
+    func remove(for key: KeychainKeys) throws {
+        try self.keychain.remove(key.rawValue)
     }
 }
 
-extension ReloadController: ServiceNotification {
-    public enum NotificationKeys: String, NotificationKey {
-        case reloadInfo
+
+
+public extension Keychain {
+    static var main: Keychain {
+        return .init(service: Bundle.main.bundleIdentifier!)
     }
 }
 
-#endif
+public extension ServiceKeychain {
+    var keychain: Keychain {
+        return .main
+    }
+}
