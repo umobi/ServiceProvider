@@ -21,20 +21,34 @@
 //
 
 import Foundation
+import RxSwift
+import RxCocoa
 
 @frozen
-public struct Request<Object>: RequestService where Object: Decodable {
+public struct Request<Object>: RequestService {
     public typealias SuccessBatch = (Object) -> Void
 
-    fileprivate let type: Object.Type
     fileprivate let batch: (@escaping SuccessBatch) -> Void
 
-    public init(_ type: Object.Type,_ batch: @escaping (@escaping SuccessBatch) -> Void) {
-        self.type = type
+    public init(_ batch: @escaping (@escaping SuccessBatch) -> Void) {
         self.batch = batch
     }
 
     public func request(onSuccess: @escaping (Object) -> Void) {
         self.batch(onSuccess)
+    }
+}
+
+public extension Request {
+    var observable: Observable<Object> {
+        let relay = BehaviorRelay<Object?>(value: nil)
+
+        self.request(onSuccess: {
+            relay.accept($0)
+        })
+
+        return relay.flatMapLatest { value -> Observable<Object> in
+            value.map(Observable.just) ?? .empty()
+        }
     }
 }

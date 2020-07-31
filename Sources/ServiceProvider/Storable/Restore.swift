@@ -97,12 +97,6 @@ private extension Restore {
     }
 }
 
-private extension Restore {
-    var privateKey: String {
-        "\(Self.self).\(self.key)"
-    }
-}
-
 public extension Restore {
     func releaseOnInvalid(_ flag: Bool = true) -> Self {
         self.edit {
@@ -120,7 +114,7 @@ public extension Restore {
 public extension Restore {
     var observable: Observable<Object> {
         NotificationCenter.default.rx
-            .notification(.init(self.privateKey))
+            .notification(.init(self.key))
             .map { _ in () }
             .startWith(())
             .flatMapLatest { _ -> Observable<Object> in
@@ -132,11 +126,19 @@ public extension Restore {
                 }
             }
     }
+
+    var tryObservable: Observable<Object?> {
+        NotificationCenter.default.rx
+            .notification(.init(self.key))
+            .map { _ in () }
+            .startWith(())
+            .map { _ in self.getOrNil() }
+    }
 }
 
 public extension Restore {
     func get() throws -> Object {
-        guard let data = self.userDefaults.data(forKey: self.privateKey) else {
+        guard let data = self.userDefaults.data(forKey: self.key) else {
             switch self.default {
             case .object(let object):
                 return object
@@ -149,7 +151,7 @@ public extension Restore {
 
         guard self.isValid(object) else {
             if self.releaseIfInvalid {
-                self.userDefaults.setValue(nil, forKey: privateKey)
+                self.userDefaults.setValue(nil, forKey: self.key)
             }
 
             throw ServiceError("Invalid Object")

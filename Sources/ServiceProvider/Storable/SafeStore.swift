@@ -71,12 +71,6 @@ private extension SafeStore {
 }
 
 private extension SafeStore {
-    var privateKey: String {
-        "\(Self.self).\(self.key)"
-    }
-}
-
-private extension SafeStore {
     func postIfAvailable() {
         guard self.isSharedResource else {
             return
@@ -84,7 +78,7 @@ private extension SafeStore {
 
         NotificationCenter.default.post(
             .init(
-                name: Notification.Name(rawValue: self.privateKey),
+                name: Notification.Name(rawValue: self.key),
                 object: nil,
                 userInfo: [:]
             )
@@ -114,7 +108,7 @@ public extension SafeStore {
 
         try self.keychain.set(
             try JSONEncoder().encode(object),
-            key: self.privateKey
+            key: self.key
         )
 
 
@@ -126,7 +120,7 @@ public extension SafeStore {
     }
 
     func release() {
-        try? self.keychain.remove(self.privateKey)
+        try? self.keychain.remove(self.key)
         self.postIfAvailable()
     }
 }

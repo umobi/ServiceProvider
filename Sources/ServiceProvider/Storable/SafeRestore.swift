@@ -98,12 +98,6 @@ private extension SafeRestore {
     }
 }
 
-private extension SafeRestore {
-    var privateKey: String {
-        "\(Self.self).\(self.key)"
-    }
-}
-
 public extension SafeRestore {
     func releaseOnInvalid(_ flag: Bool = true) -> Self {
         self.edit {
@@ -121,7 +115,7 @@ public extension SafeRestore {
 public extension SafeRestore {
     var observable: Observable<Object> {
         NotificationCenter.default.rx
-            .notification(.init(self.privateKey))
+            .notification(.init(self.key))
             .map { _ in () }
             .startWith(())
             .flatMapLatest { _ -> Observable<Object> in
@@ -133,11 +127,19 @@ public extension SafeRestore {
                 }
             }
     }
+
+    var tryObservable: Observable<Object?> {
+        NotificationCenter.default.rx
+            .notification(.init(self.key))
+            .map { _ in () }
+            .startWith(())
+            .map { _ in self.getOrNil() }
+    }
 }
 
 public extension SafeRestore {
     func get() throws -> Object {
-        guard let data = try self.keychain.getData(self.privateKey) else {
+        guard let data = try self.keychain.getData(self.key) else {
             switch self.default {
             case .object(let object):
                 return object
@@ -150,7 +152,7 @@ public extension SafeRestore {
 
         guard self.isValid(object) else {
             if self.releaseIfInvalid {
-                try? self.keychain.remove(self.privateKey)
+                try? self.keychain.remove(self.key)
             }
 
             throw ServiceError("Invalid Object")

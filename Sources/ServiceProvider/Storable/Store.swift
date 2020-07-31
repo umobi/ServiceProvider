@@ -70,12 +70,6 @@ private extension Store {
 }
 
 private extension Store {
-    var privateKey: String {
-        "\(Self.self).\(self.key)"
-    }
-}
-
-private extension Store {
     func postIfAvailable() {
         guard self.isSharedResource else {
             return
@@ -83,7 +77,7 @@ private extension Store {
 
         NotificationCenter.default.post(
             .init(
-                name: Notification.Name(rawValue: self.privateKey),
+                name: Notification.Name(rawValue: self.key),
                 object: nil,
                 userInfo: [:]
             )
@@ -101,7 +95,7 @@ public extension Store {
 
         self.userDefaults.setValue(
             data,
-            forKey: self.privateKey
+            forKey: self.key
         )
 
         self.postIfAvailable()
@@ -110,7 +104,7 @@ public extension Store {
     func release() {
         self.userDefaults.setValue(
             nil,
-            forKey: self.privateKey
+            forKey: self.key
         )
 
         self.postIfAvailable()
