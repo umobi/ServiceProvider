@@ -1,6 +1,0 @@
-framework module Pods_ServiceProvider_Tests {
-  umbrella header "Pods-ServiceProvider_Tests-umbrella.h"
-
-  export *
-  module * { export * }
-}
