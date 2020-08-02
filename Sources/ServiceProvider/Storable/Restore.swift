@@ -112,31 +112,6 @@ public extension Restore {
 }
 
 public extension Restore {
-    var observable: Observable<Object> {
-        NotificationCenter.default.rx
-            .notification(.init(self.key))
-            .map { _ in () }
-            .startWith(())
-            .flatMapLatest { _ -> Observable<Object> in
-                do {
-                    let object = try self.get()
-                    return .just(object)
-                } catch let error {
-                    return .error(error)
-                }
-            }
-    }
-
-    var tryObservable: Observable<Object?> {
-        NotificationCenter.default.rx
-            .notification(.init(self.key))
-            .map { _ in () }
-            .startWith(())
-            .map { _ in self.getOrNil() }
-    }
-}
-
-public extension Restore {
     func get() throws -> Object {
         guard let data = self.userDefaults.data(forKey: self.key) else {
             switch self.default {
@@ -164,3 +139,53 @@ public extension Restore {
         try? self.get()
     }
 }
+
+public extension Restore {
+    var observable: Observable<Object> {
+        NotificationCenter.default.rx
+            .notification(.init(self.key))
+            .map { _ in () }
+            .startWith(())
+            .flatMapLatest { _ -> Observable<Object> in
+                do {
+                    let object = try self.get()
+                    return .just(object)
+                } catch let error {
+                    return .error(error)
+                }
+            }
+    }
+
+    var tryObservable: Observable<Object?> {
+        NotificationCenter.default.rx
+            .notification(.init(self.key))
+            .map { _ in () }
+            .startWith(())
+            .map { _ in self.getOrNil() }
+    }
+}
+
+#if canImport(Combine)
+import Combine
+
+@available(iOS 13, watchOS 6, macOS 10.15, tvOS 13, *)
+public extension Restore {
+    var publisher: AnyPublisher<Object, Error> {
+        NotificationCenter.default
+            .publisher(for: .init(self.key))
+            .map { _ in () }
+            .prepend(())
+            .tryMap { try self.get() }
+            .eraseToAnyPublisher()
+    }
+
+    var tryPublisher: AnyPublisher<Object?, Never> {
+        NotificationCenter.default
+            .publisher(for: .init(self.key))
+            .map { _ in () }
+            .prepend(())
+            .map { self.getOrNil() }
+            .eraseToAnyPublisher()
+    }
+}
+#endif

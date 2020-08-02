@@ -52,3 +52,29 @@ public extension Request {
         }
     }
 }
+
+#if canImport(Combine)
+import Combine
+
+@available(iOS 13, tvOS 13, macOS 10.15, watchOS 6, *)
+public extension Request {
+    var publisher: AnyPublisher<Object, Never> {
+        let currentValue = CurrentValueSubject<Object?, Never>(nil)
+
+        self.request(onSuccess: {
+            currentValue.value = $0
+        })
+
+        return currentValue.flatMap { value -> AnyPublisher<Object, Never> in
+            if let value = value {
+                return Just(value)
+                    .eraseToAnyPublisher()
+            }
+
+            return Empty()
+                .eraseToAnyPublisher()
+        }
+        .eraseToAnyPublisher()
+    }
+}
+#endif
