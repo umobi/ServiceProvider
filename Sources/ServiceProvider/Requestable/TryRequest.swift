@@ -33,7 +33,36 @@ public struct TryRequest<Object, Failure>: TryRequestService where Failure: Erro
         self.batch = batch
     }
 
-    public func request(onSuccess: @escaping (Object) -> Void, onError: @escaping (Error) -> Void) {
+    public func request(onSuccess: @escaping (Object) -> Void, onError: @escaping (Failure) -> Void) {
         self.batch(onSuccess, onError)
     }
 }
+
+#if canImport(Combine)
+import Combine
+
+@available(iOS 13, tvOS 13, macOS 10.15, watchOS 6, *)
+public extension TryRequest {
+    var publisher: AnyPublisher<Object, Failure> {
+        let currentValue = CurrentValueSubject<Object?, Failure>(nil)
+
+        self.request(onSuccess: {
+            currentValue.value = $0
+        }, onError: {
+            currentValue.send(completion: .failure($0))
+        })
+
+        return currentValue.flatMap { value -> AnyPublisher<Object, Failure> in
+            if let value = value {
+                return Just(value)
+                    .setFailureType(to: Failure.self)
+                    .eraseToAnyPublisher()
+            }
+
+            return Empty()
+                .eraseToAnyPublisher()
+        }
+        .eraseToAnyPublisher()
+    }
+}
+#endif

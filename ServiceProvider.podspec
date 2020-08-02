@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ServiceProvider'
-  s.version          = '1.2.0'
+  s.version          = '2.0.0'
   s.summary          = 'ServiceProvider use the idea of micro services to create expecialized services, like ones to store and load data from UserDefaults.'
 
   s.description      = <<-DESC
