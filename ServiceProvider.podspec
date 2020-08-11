@@ -8,33 +8,27 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ServiceProvider'
-  s.version          = '1.2.0'
-  s.summary          = 'ServiceProvider keeps your data near from our code'
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
+  s.version          = '2.0.0'
+  s.summary          = 'ServiceProvider use the idea of micro services to create expecialized services, like ones to store and load data from UserDefaults.'
 
   s.description      = <<-DESC
 ServiceProvider is a library to implement the default methods to maintain stored data
 DESC
 
   s.homepage         = 'https://github.com/umobi/ServiceProvider'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'brennobemoura' => 'brenno@umobi.com.br' }
   s.source           = { :git => 'https://github.com/umobi/ServiceProvider.git', :tag => s.version.to_s }
   
-  s.swift_version = '5.1'
+  s.swift_version = '5.2'
   s.tvos.deployment_target = '10.0'
   s.ios.deployment_target = '10.0'
   s.watchos.deployment_target = '4.0'
+  s.macos.deployment_target = '10.13'
 
-  s.source_files = 'Sources/ServiceProvider/Classes/**/*'
+  s.source_files = 'Sources/ServiceProvider/**/*'
 
-  s.dependency 'RxSwift', '~> 5.0'
-  s.dependency 'RxCocoa', '~> 5.0'
-  s.dependency 'KeychainAccess', ">= 3.2", '<= 4.1.0'
+  s.dependency 'RxSwift', '>= 5.0', '< 6.0.0'
+  s.dependency 'RxCocoa', '>= 5.0', '< 6.0.0'
+  s.dependency 'KeychainAccess', ">= 4.0.0", '< 5.0.0'
 end
